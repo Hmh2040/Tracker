@@ -1,48 +1,47 @@
-// قائمة شاملة لكل تمارينك المعتمدة مع عدد جلساتها الافتراضية
 const allExercises = [
-    // الجزء العلوي والأكتاف والظهر
-    { name: "Barbell Strict Overhead Press", sets: 4, category: "Upper/Shoulders" },
-    { name: "Pull-ups (سحب واسع)", sets: 3, category: "Back" },
-    { name: "Weighted Pull-ups", sets: 4, category: "Back" },
-    { name: "Incline Dumbbell Bench Press", sets: 3, category: "Chest" },
-    { name: "Barbell Pendlay Rows", sets: 3, category: "Back" },
-    { name: "Dumbbell Lateral Raises", sets: 3, category: "Shoulders" },
-    { name: "Barbell Shrugs", sets: 3, category: "Traps" },
-    { name: "Dips", sets: 3, category: "Chest/Triceps" },
-    { name: "Weighted Dips", sets: 3, category: "Chest/Triceps" },
-    { name: "Barbell Bench Press", sets: 4, category: "Chest" },
-    { name: "Dumbbell Overhead Press", sets: 3, category: "Shoulders" },
-    { name: "Cable Crossover", sets: 3, category: "Chest" },
-    { name: "Overhead Triceps Extension", sets: 3, category: "Triceps" },
-    { name: "T-Bar Row / Landmine Row", sets: 3, category: "Back" },
-    { name: "Face Pulls", sets: 3, category: "Rear Delts" },
-    { name: "Barbell Bicep Curls", sets: 3, category: "Biceps" },
-    
-    // الأرجل والسلسلة الخلفية
-    { name: "Deadlift", sets: 4, category: "Lower Body" },
-    { name: "Lying Leg Curls", sets: 3, category: "Hamstrings" },
-    { name: "Kettlebell Goblet Squat", sets: 3, category: "Legs" },
-    { name: "Hip Thrust", sets: 3, category: "Glutes" },
-    { name: "Standing Calf Raises", sets: 3, category: "Calves" },
-    { name: "Barbell Squat", sets: 4, category: "Legs" },
-    { name: "RDL (Romanian Deadlift)", sets: 3, category: "Hamstrings" },
-    { name: "Bulgarian Split Squat", sets: 3, category: "Legs" },
-    { name: "Adductor Machine / Cable", sets: 3, category: "Adductors" },
-    { name: "Seated Calf Raises", sets: 3, category: "Calves" },
-    { name: "Kettlebell Swings", sets: 3, category: "Posterior Chain" }
+    { name: "Barbell Strict Overhead Press", sets: 4, category: "أكتاف" },
+    { name: "Pull-ups (سحب واسع)", sets: 3, category: "ظهر" },
+    { name: "Weighted Pull-ups", sets: 4, category: "ظهر" },
+    { name: "Incline Dumbbell Bench Press", sets: 3, category: "صدر" },
+    { name: "Barbell Pendlay Rows", sets: 3, category: "ظهر" },
+    { name: "Dumbbell Lateral Raises", sets: 3, category: "أكتاف جانبي" },
+    { name: "Barbell Shrugs", sets: 3, category: "ترابس" },
+    { name: "Dips", sets: 3, category: "صدر وتراي" },
+    { name: "Weighted Dips", sets: 3, category: "صدر وتراي" },
+    { name: "Barbell Bench Press", sets: 4, category: "صدر" },
+    { name: "Dumbbell Overhead Press", sets: 3, category: "أكتاف" },
+    { name: "Cable Crossover", sets: 3, category: "صدر" },
+    { name: "Overhead Triceps Extension", sets: 3, category: "ترايسبس" },
+    { name: "T-Bar Row / Landmine Row", sets: 3, category: "ظهر" },
+    { name: "Face Pulls", sets: 3, category: "أكتاف خلفي" },
+    { name: "Barbell Bicep Curls", sets: 3, category: "بايسبس" },
+    { name: "Deadlift", sets: 4, category: "سلسلة خلفية" },
+    { name: "Lying Leg Curls", sets: 3, category: "أفخاذ خلفية" },
+    { name: "Kettlebell Goblet Squat", sets: 3, category: "أرجل" },
+    { name: "Hip Thrust", sets: 3, category: "أرداف" },
+    { name: "Standing Calf Raises", sets: 3, category: "بطات" },
+    { name: "Barbell Squat", sets: 4, category: "أرجل" },
+    { name: "RDL (Romanian Deadlift)", sets: 3, category: "أفخاذ خلفية" },
+    { name: "Bulgarian Split Squat", sets: 3, category: "أرجل" },
+    { name: "Adductor Machine / Cable", sets: 3, category: "ضامة" },
+    { name: "Seated Calf Raises", sets: 3, category: "بطات" },
+    { name: "Kettlebell Swings", sets: 3, category: "سلسلة خلفية" }
 ];
 
-// تعبئة القائمة المنسدلة عند فتح التطبيق
-window.onload = function() {
+// دالة تهيئة التطبيق (تشتغل فوراً)
+function initApp() {
     const select = document.getElementById('exerciseSelect');
-    allExercises.forEach((ex, index) => {
-        let option = document.createElement('option');
-        option.value = index;
-        option.textContent = `${ex.name} (${ex.category})`;
-        select.appendChild(option);
-    });
+    if(select) {
+        select.innerHTML = '<option value="">-- اختر التمرين من القائمة --</option>';
+        allExercises.forEach((ex, index) => {
+            let option = document.createElement('option');
+            option.value = index;
+            option.textContent = `${ex.name} (${ex.category})`;
+            select.appendChild(option);
+        });
+    }
     loadHistory();
-};
+}
 
 function onExerciseChange() {
     const index = document.getElementById('exerciseSelect').value;
@@ -54,7 +53,7 @@ function onExerciseChange() {
     let ex = allExercises[index];
     let exDiv = document.createElement('div');
     exDiv.className = 'exercise-card';
-    exDiv.innerHTML = `<h3>${ex.name} (عدد الجلسات المقترحة: ${ex.sets})</h3>`;
+    exDiv.innerHTML = `<h3 style="color:#4facfe; text-align:center;">${ex.name} <br><small>(الجلسات المقترحة: ${ex.sets})</small></h3>`;
 
     let setsContainer = document.createElement('div');
     setsContainer.id = `sets-container`;
@@ -64,15 +63,15 @@ function onExerciseChange() {
         setRow.className = 'set-row';
         setRow.innerHTML = `
             <span>جلسة ${i}:</span>
-            <input type="number" placeholder="الوزن (كج)" id="weight-${i}" class="input-weight">
-            <input type="number" placeholder="التكرارات" id="reps-${i}" class="input-reps">
+            <input type="number" placeholder="الوزن" id="weight-${i}">
+            <input type="number" placeholder="العدات" id="reps-${i}">
         `;
         setsContainer.appendChild(setRow);
     }
 
     let saveBtn = document.createElement('button');
     saveBtn.className = 'save-set-btn';
-    saveBtn.innerText = `حفظ تمرين ${ex.name}`;
+    saveBtn.innerText = `حفظ بيانات التمرين`;
     saveBtn.onclick = function() { saveExercise(ex.name, ex.sets); };
 
     exDiv.appendChild(setsContainer);
@@ -98,21 +97,21 @@ function saveExercise(exName, totalSets) {
     }
 
     if (setsData.length === 0) {
-        return alert('يرجى تعبئة وزنة وتكرارات لجلسة واحدة على الأقل!');
+        return alert('يا وحش، عبّي وزن وتكرار لجلسة واحدة على الأقل عشان نحفظها!');
     }
 
     let estimatedCals = Math.round(totalWeightLifted * 0.05 + (totalSets * 12));
 
     let record = {
         date: new Date().toLocaleDateString('en-GB'),
-        text: `تمرين: ${exName} (${setsData.length}/${totalSets} جلسات مسجلة)`,
+        text: `تمرين: ${exName} (${setsData.length}/${totalSets} جلسات)`,
         cals: estimatedCals
     };
 
     saveRecord(record);
     document.getElementById('exerciseSelect').value = "";
     document.getElementById('exerciseCardContainer').innerHTML = "";
-    alert('تم حفظ التمرين بنجاح! 🔥');
+    alert('تم حفظ التمرين بالنجاح!');
 }
 
 function saveCardio() {
@@ -120,7 +119,7 @@ function saveCardio() {
     let mins = parseInt(document.getElementById('cardioMins').value);
 
     if (!name || !mins) {
-        return alert('يرجى إدخال نوع الكارديو والمدة!');
+        return alert('أدخل نوع الكارديو والمدة بشكل صحيح!');
     }
 
     let cals = Math.round(mins * 9);
@@ -133,7 +132,7 @@ function saveCardio() {
     saveRecord(record);
     document.getElementById('cardioName').value = '';
     document.getElementById('cardioMins').value = '';
-    alert('تم حفظ الكارديو بنجاح! 🏃‍♂️');
+    alert('عاش، تم حفظ الكارديو!');
 }
 
 function saveRecord(record) {
@@ -146,29 +145,8 @@ function saveRecord(record) {
 function loadHistory() {
     let history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
     const list = document.getElementById('historyList');
-    list.innerHTML = '';
+    if(!list) return;
     
-    const today = new Date().toLocaleDateString('en-GB');
-    const todayHistory = history.filter(item => item.date === today);
-
-    todayHistory.forEach(item => {
-        let li = document.createElement('li');
-        li.innerHTML = `${item.text} <br><span class="cals">🔥 حرقت تقريباً: ${item.cals} سعرة</span>`;
-        list.appendChild(li);
-    });
-}
-});
-
-function saveRecord(record) {
-    let history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
-    history.push(record);
-    localStorage.setItem('workoutHistory', JSON.stringify(history));
-    loadHistory();
-}
-
-function loadHistory() {
-    let history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
-    const list = document.getElementById('historyList');
     list.innerHTML = '';
     
     const today = new Date().toLocaleDateString('en-GB');
@@ -181,4 +159,5 @@ function loadHistory() {
     });
 }
 
-window.onload = loadHistory;
+// تشغيل التهيئة فوراً
+initApp();
