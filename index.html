@@ -3,37 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متتبع التمارين</title>
+    <title>متتبع التمارين الحر</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>سجل تمارينك يا وحش 🏋️‍♂️</h1>
+        <h1>سجل تمارينك بحرية 🏋️‍♂️</h1>
         
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('lifting')">حديد</button>
-            <button class="tab-btn" onclick="switchTab('cardio')">كارديو</button>
+        <div class="form-group">
+            <label for="exerciseSelect">اختر التمرين:</label>
+            <select id="exerciseSelect" onchange="onExerciseChange()">
+                <option value="">-- اختر التمرين من القائمة --</option>
+            </select>
         </div>
 
-        <form id="trackerForm">
-            <div id="liftingFields">
-                <input type="text" id="exerciseName" placeholder="اسم التمرين (مثال: Deadlift)">
-                <input type="number" id="sets" placeholder="عدد الجلسات">
-                <input type="number" id="weight" placeholder="الوزن (كج)">
-            </div>
-            
-            <div id="cardioFields" style="display: none;">
-                <input type="text" id="cardioName" placeholder="نوع الكارديو (مثال: سير، دراجة)">
-                <input type="number" id="minutes" placeholder="المدة (بالدقائق)">
-            </div>
-
-            <button type="submit" class="save-btn">حفظ التمرين</button>
-        </form>
+        <div id="exerciseCardContainer"></div>
 
         <div class="history">
             <h2>سجل اليوم</h2>
             <ul id="historyList"></ul>
+        </div>
+        
+        <div class="cardio-section">
+            <h2>تسجيل الكارديو</h2>
+            <input type="text" id="cardioName" placeholder="نوع الكارديو (مثال: سير، دراجة)">
+            <input type="number" id="cardioMins" placeholder="المدة (بالدقائق)">
+            <button type="button" class="save-btn" onclick="saveCardio()">حفظ الكارديو</button>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
         </div>
     </div>
     <script src="app.js"></script>
