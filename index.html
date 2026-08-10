@@ -11,7 +11,6 @@
     <div class="container">
         <h1>سجل تمارينك يا وحش 🏋️‍♂️</h1>
         
-        <!-- القائمة الأولى: اختيار نوع التمرين العام -->
         <div class="form-group">
             <label for="categorySelect">1. اختر نوع تمرين اليوم:</label>
             <select id="categorySelect" onchange="onCategoryChange()">
@@ -24,7 +23,6 @@
             </select>
         </div>
 
-        <!-- القائمة الثانية: اختيار التمرين (مخفية حتى يتم اختيار الفئة) -->
         <div class="form-group" id="exerciseGroup" style="display: none;">
             <label for="exerciseSelect">2. اختر التمرين:</label>
             <select id="exerciseSelect" onchange="onExerciseChange()">
@@ -32,12 +30,12 @@
             </select>
         </div>
 
-        <!-- منطقة ظهور الجلسات -->
         <div id="exerciseCardContainer"></div>
 
+        <!-- تم تحديث هذا القسم ليعرض السجل الكامل بدلاً من يوم واحد -->
         <div class="history">
-            <h2>سجل اليوم</h2>
-            <ul id="historyList"></ul>
+            <h2>سجل التمارين الكامل 📅</h2>
+            <div id="historyContainer"></div>
         </div>
         
         <div class="cardio-section">
