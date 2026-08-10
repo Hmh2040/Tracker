@@ -1,4 +1,3 @@
-// الجدول المعتمد مقسم حسب الفئات
 const workoutSchedule = {
     "Upper Body": [
         { name: "Barbell Strict Overhead Press", sets: 4 },
@@ -39,24 +38,20 @@ const workoutSchedule = {
     ]
 };
 
-// تحميل السجل عند فتح التطبيق
 window.onload = function() {
     loadHistory();
 };
 
-// دالة تتنفذ لما تختار الفئة الأساسية
 function onCategoryChange() {
     const category = document.getElementById('categorySelect').value;
     const exGroup = document.getElementById('exerciseGroup');
     const exSelect = document.getElementById('exerciseSelect');
     const container = document.getElementById('exerciseCardContainer');
 
-    // تصفير الخانات
     container.innerHTML = '';
     exSelect.innerHTML = '<option value="">-- اختر التمرين --</option>';
 
     if (category && workoutSchedule[category]) {
-        // إظهار القائمة الثانية وتعبئتها
         exGroup.style.display = 'block';
         workoutSchedule[category].forEach((ex, index) => {
             let option = document.createElement('option');
@@ -65,12 +60,10 @@ function onCategoryChange() {
             exSelect.appendChild(option);
         });
     } else {
-        // إخفاء القائمة الثانية إذا لم يتم اختيار فئة
         exGroup.style.display = 'none';
     }
 }
 
-// دالة تتنفذ لما تختار التمرين نفسه
 function onExerciseChange() {
     const category = document.getElementById('categorySelect').value;
     const index = document.getElementById('exerciseSelect').value;
@@ -109,10 +102,10 @@ function onExerciseChange() {
     container.appendChild(exDiv);
 }
 
-// حفظ بيانات التمرين
 function saveExercise(exName, totalSets) {
     let setsData = [];
     let totalWeightLifted = 0;
+    let detailsHtml = `<div class="set-details">`;
 
     for (let i = 1; i <= totalSets; i++) {
         let wField = document.getElementById(`weight-${i}`);
@@ -124,8 +117,11 @@ function saveExercise(exName, totalSets) {
         if (w > 0 && r > 0) {
             setsData.push({ set: i, weight: w, reps: r });
             totalWeightLifted += (w * r);
+            detailsHtml += `<div>جلسة ${i}: ${w} كج × ${r} عدات</div>`;
         }
     }
+    
+    detailsHtml += `</div>`;
 
     if (setsData.length === 0) {
         return alert('الرجاء إدخال وزن وتكرار لجلسة واحدة على الأقل قبل الحفظ!');
@@ -135,19 +131,18 @@ function saveExercise(exName, totalSets) {
 
     let record = {
         date: new Date().toLocaleDateString('en-GB'),
-        text: `تمرين: ${exName} (${setsData.length}/${totalSets} جلسات)`,
+        timestamp: new Date().getTime(), // لترتيب التواريخ لاحقاً
+        text: `<strong>${exName}</strong> ${detailsHtml}`,
         cals: estimatedCals
     };
 
     saveRecord(record);
     
-    // إعادة تعيين القوائم بعد الحفظ
     document.getElementById('exerciseSelect').value = "";
     document.getElementById('exerciseCardContainer').innerHTML = "";
     alert('تم الحفظ في السجل بنجاح!');
 }
 
-// حفظ الكارديو
 function saveCardio() {
     let name = document.getElementById('cardioName').value;
     let mins = parseInt(document.getElementById('cardioMins').value);
@@ -159,7 +154,8 @@ function saveCardio() {
     let cals = Math.round(mins * 9);
     let record = {
         date: new Date().toLocaleDateString('en-GB'),
-        text: `كارديو: ${name} | ${mins} دقيقة`,
+        timestamp: new Date().getTime(),
+        text: `<strong>كارديو: ${name}</strong> <br><div class="set-details">المدة: ${mins} دقيقة</div>`,
         cals: cals
     };
 
@@ -169,7 +165,6 @@ function saveCardio() {
     alert('تم حفظ نشاط الكارديو!');
 }
 
-// تخزين وعرض السجل
 function saveRecord(record) {
     let history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
     history.push(record);
@@ -179,17 +174,46 @@ function saveRecord(record) {
 
 function loadHistory() {
     let history = JSON.parse(localStorage.getItem('workoutHistory')) || [];
-    const list = document.getElementById('historyList');
-    if(!list) return;
+    const container = document.getElementById('historyContainer');
+    if(!container) return;
     
-    list.innerHTML = '';
-    
-    const today = new Date().toLocaleDateString('en-GB');
-    const todayHistory = history.filter(item => item.date === today);
+    container.innerHTML = '';
 
-    todayHistory.forEach(item => {
-        let li = document.createElement('li');
-        li.innerHTML = `${item.text} <br><span class="cals">🔥 حرقت تقريباً: ${item.cals} سعرة</span>`;
-        list.appendChild(li);
+    if (history.length === 0) {
+        container.innerHTML = '<div class="empty-history">لا يوجد سجلات سابقة، ابدأ تمرينك الآن!</div>';
+        return;
+    }
+
+    // ترتيب السجلات من الأحدث للأقدم بناءً على الوقت
+    history.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+    // تجميع السجلات حسب التاريخ
+    const groupedByDate = {};
+    history.forEach(item => {
+        if (!groupedByDate[item.date]) {
+            groupedByDate[item.date] = [];
+        }
+        groupedByDate[item.date].push(item);
     });
+
+    // رسم السجل في الصفحة
+    for (const date in groupedByDate) {
+        // إنشاء عنوان التاريخ
+        let dateHeader = document.createElement('div');
+        dateHeader.className = 'date-header';
+        dateHeader.innerText = `تاريخ: ${date}`;
+        container.appendChild(dateHeader);
+
+        // إنشاء قائمة التمارين لهذا التاريخ
+        let ul = document.createElement('ul');
+        ul.className = 'history-ul';
+        
+        groupedByDate[date].forEach(item => {
+            let li = document.createElement('li');
+            li.innerHTML = `${item.text} <span class="cals">🔥 حرقت تقريباً: ${item.cals} سعرة</span>`;
+            ul.appendChild(li);
+        });
+        
+        container.appendChild(ul);
+    }
 }
